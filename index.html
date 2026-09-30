@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guitar Interval Trainer</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+    <div>
+        <h1>🎸 Guitar Interval Trainer</h1>
+        <p>Learn intervals → visualize them → master the fretboard.</p>
+    </div>
+
+    <div class="badge">Standard tuning · E A D G B E</div>
+</header>
+
+
+<!-- ================================
+     TABS
+================================ -->
+
+<div class="tabs">
+
+    <button class="tab active" data-tab="learn">
+        Learn
+    </button>
+
+    <button class="tab" data-tab="explorer">
+        Fretboard Explorer
+    </button>
+
+    <button class="tab" data-tab="name-game">
+        Game 1 · Name the Note
+    </button>
+
+    <button class="tab" data-tab="locate-game">
+        Game 2 · Find All
+    </button>
+
+</div>
+
+
+<!-- ================================
+     LEARN
+================================ -->
+
+<section id="learn" class="section active">
+
+    <div class="card">
+
+        <h2>Intervals are the distance between notes</h2>
+
+        <p>
+            An interval describes the musical distance between a root note
+            and another note. On guitar, semitones are the physical distance
+            between adjacent frets.
+        </p>
+
+        <div class="steps">
+
+            <div class="step">
+                <b>1 · Choose the root</b>
+                <span>Example: G</span>
+            </div>
+
+            <div class="step">
+                <b>2 · Count semitones</b>
+                <span>G → G♯ → A → A♯ → B = 4</span>
+            </div>
+
+            <div class="step">
+                <b>3 · Name the interval</b>
+                <span>4 semitones = Major 3rd</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Chromatic Interval Table</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Semitones</th>
+                    <th>Interval</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+
+            <tbody id="interval-table"></tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Standard Guitar Tuning</h2>
+
+        <p>
+            Low → high:
+            <b>E – A – D – G – B – E</b>
+        </p>
+
+        <p>
+            Adjacent-string intervals:
+            <b>P4 · P4 · P4 · M3 · P4</b>
+        </p>
+
+        <p>
+            The G → B string pair is the tuning exception that causes
+            many guitar shapes to shift.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================================
+     EXPLORER
+================================ -->
+
+<section id="explorer" class="section">
+
+    <div class="card">
+
+        <h2>Fretboard Explorer</h2>
+
+        <div class="controls">
+
+            <div class="field">
+                <label>ROOT</label>
+                <select id="explorer-root"></select>
+            </div>
+
+            <div class="field">
+                <label>INTERVAL</label>
+                <select id="explorer-interval"></select>
+            </div>
+
+            <div class="field">
+                <label>FRETS</label>
+                <select id="explorer-frets">
+                    <option value="12">12</option>
+                    <option value="15">15</option>
+                    <option value="22">22</option>
+                    <option value="24" selected>24</option>
+                </select>
+            </div>
+
+            <button class="primary" id="explorer-show">
+                Show Interval
+            </button>
+
+        </div>
+
+        <div class="question" id="explorer-question"></div>
+
+        <div class="fretboard-tools">
+            <button type="button" data-zoom-target="explorer-fretboard" data-zoom-action="out" aria-label="Zoom out">−</button>
+            <span class="fretboard-zoom-value" id="explorer-zoom-value">100%</span>
+            <button type="button" data-zoom-target="explorer-fretboard" data-zoom-action="in" aria-label="Zoom in">+</button>
+            <button type="button" data-zoom-target="explorer-fretboard" data-zoom-action="fit" aria-label="Fit fretboard">Fit</button>
+        </div>
+
+        <div class="fretboard-scroll" id="explorer-fretboard-wrap">
+            <div class="fretboard-stage" id="explorer-fretboard-stage">
+                <div class="fretboard" id="explorer-fretboard"></div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <span><i class="dot root"></i>Root</span>
+            <span><i class="dot correct"></i>Selected</span>
+        </div>
+
+        <div class="detail" id="explorer-detail">
+            Click a note to inspect its string, fret and interval.
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================================
+     GAME 1
+================================ -->
+
+<section id="name-game" class="section">
+
+    <div class="card">
+
+        <h2>Game 1 · Name the Note</h2>
+
+        <p>
+            Identify the note that forms the requested interval.
+        </p>
+
+        <div class="controls" style="margin-top:15px">
+
+            <div class="field">
+                <label>ROOT MODE</label>
+                <select id="game1-root-mode">
+                    <option value="random">Random</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>FIXED ROOT</label>
+                <select id="game1-root"></select>
+            </div>
+
+            <div class="field">
+                <label>INTERVAL MODE</label>
+                <select id="game1-interval-mode">
+                    <option value="random">Random</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>FIXED INTERVAL</label>
+                <select id="game1-interval"></select>
+            </div>
+
+            <button id="game1-freeze-root">
+                Freeze Root
+            </button>
+
+            <button id="game1-freeze-interval">
+                Freeze Interval
+            </button>
+
+            <button id="game1-new" class="primary">
+                New Question
+            </button>
+
+        </div>
+
+        <div class="question" id="game1-question"></div>
+
+        <div class="controls">
+
+            <div class="field">
+                <label>ANSWER</label>
+                <select id="game1-answer"></select>
+            </div>
+
+            <button id="game1-submit" class="primary">
+                Submit
+            </button>
+
+        </div>
+
+        <div class="feedback" id="game1-feedback"></div>
+
+        <div class="status">
+
+            <div class="stat">
+                <small>Score</small>
+                <span id="game1-score">0</span>
+            </div>
+
+            <div class="stat">
+                <small>Streak</small>
+                <span id="game1-streak">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================================
+     GAME 2
+================================ -->
+
+<section id="locate-game" class="section">
+
+    <div class="card">
+
+        <h2>Game 2 · Find ALL on the Fretboard</h2>
+
+        <p>
+            Find every occurrence of the requested interval across the
+            selected fret range. The target positions are never revealed.
+        </p>
+
+        <div class="controls" style="margin-top:15px">
+
+            <div class="field">
+                <label>ROOT MODE</label>
+                <select id="game2-root-mode">
+                    <option value="random">Random</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>FIXED ROOT</label>
+                <select id="game2-root"></select>
+            </div>
+
+            <div class="field">
+                <label>INTERVAL MODE</label>
+                <select id="game2-interval-mode">
+                    <option value="random">Random</option>
+                    <option value="fixed">Fixed</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>FIXED INTERVAL</label>
+                <select id="game2-interval"></select>
+            </div>
+
+            <div class="field">
+                <label>FRET RANGE</label>
+                <select id="game2-frets">
+                    <option value="12">12</option>
+                    <option value="15">15</option>
+                    <option value="22">22</option>
+                    <option value="24" selected>24</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>NOTE NAMES</label>
+                <select id="game2-note-names">
+                    <option value="show">Show</option>
+                    <option value="hide" selected>Hide</option>
+                </select>
+            </div>
+
+            <button id="game2-freeze-root">
+                Freeze Root
+            </button>
+
+            <button id="game2-freeze-interval">
+                Freeze Interval
+            </button>
+
+            <button id="game2-new" class="primary">
+                New Question
+            </button>
+
+        </div>
+
+        <div class="question" id="game2-question"></div>
+
+        <div class="status">
+
+            <div class="stat">
+                <small>Found</small>
+                <span id="game2-found">0</span>
+                /
+                <span id="game2-total">0</span>
+            </div>
+
+            <div class="stat">
+                <small>Score</small>
+                <span id="game2-score">0</span>
+            </div>
+
+            <div class="stat">
+                <small>Streak</small>
+                <span id="game2-streak">0</span>
+            </div>
+
+        </div>
+
+        <div class="fretboard-tools">
+            <button type="button" data-zoom-target="game2-fretboard" data-zoom-action="out" aria-label="Zoom out">−</button>
+            <span class="fretboard-zoom-value" id="game2-zoom-value">100%</span>
+            <button type="button" data-zoom-target="game2-fretboard" data-zoom-action="in" aria-label="Zoom in">+</button>
+            <button type="button" data-zoom-target="game2-fretboard" data-zoom-action="fit" aria-label="Fit fretboard">Fit</button>
+        </div>
+
+        <div class="fretboard-scroll" id="game2-fretboard-wrap">
+            <div class="fretboard-stage" id="game2-fretboard-stage">
+                <div class="fretboard" id="game2-fretboard"></div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <span><i class="dot root"></i>Root</span>
+            <span><i class="dot target"></i>Unselected position</span>
+            <span><i class="dot correct"></i>Correct</span>
+            <span><i class="dot wrong"></i>Wrong</span>
+        </div>
+
+        <div class="feedback" id="game2-feedback"></div>
+
+        <div class="detail" id="game2-detail">
+            Find every occurrence of the target interval.
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<script src="js/app.js"></script>
+
+
+</body>
+</html>
